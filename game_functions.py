@@ -3,6 +3,7 @@ import pygame
 from alien import Alien
 from bullet import Bullet
 from time import sleep
+from game_stats import GameStats
 
 def check_keydown_events(event, ai_settings, screen, ship, bullets):
     """Responde a pressionamentos de tecla."""
@@ -45,7 +46,7 @@ def check_events(ai_settings, screen, ship, bullets):
             check_keyup_events(event, ship)
         
 
-def update_screen(ai_settings, screen, ship, aliens, bullets):
+def update_screen(ai_settings, screen, stats, ship, aliens, bullets, play_button):
     """Atualiza as imagens na tela e alterna para a nova tela."""
     # Redesenha a tela a cada passagem pelo laço
     screen.fill(ai_settings.bg_color)
@@ -58,9 +59,14 @@ def update_screen(ai_settings, screen, ship, aliens, bullets):
     
     aliens.draw(screen)
     
+    # Desenha o botão Play se o jogo estiver inativo 
+    # stats = GameStats(ai_settings)
+    if not stats.game_active: 
+        play_button.draw_button()
     
     # Deixa a tela mais recente visível 
     pygame.display.flip()
+    
     
 
 def update_bullets(ai_settings, screen, ship, aliens, bullets):
