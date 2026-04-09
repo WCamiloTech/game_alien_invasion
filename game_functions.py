@@ -55,14 +55,22 @@ def check_play_button(ai_settings, screen, stats, play_button, ship, aliens, bul
     
     if button_clicked and not stats.game_active:
         # Reinicia os dados estatísticos do jogo
+        ai_settings.initialize_dynamic_settings()
         stats.reset_stats()
         stats.game_active = True
+        
+        #Limpa a tela
         aliens.empty()
         bullets.empty()
+        
         # Cria uma nova frota e centraliza a espaçonave
         create_fleet(ai_settings, screen, ship, aliens)
         ship.center_ship()
+        
+        
+        # Oculta o cursor do mouse
         pygame.mouse.set_visible(False)
+        
 
 
 def update_screen(ai_settings, screen, stats, ship, aliens, bullets, play_button):
@@ -216,7 +224,7 @@ def update_aliens(ai_settings, stats, screen, ship, aliens, bullets):
     check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets)
     
     
-def ship_hit(ai_settings, screen, stats, ship, aliens, bullets):
+def ship_hit(ai_settings, stats, screen, ship, aliens, bullets):
     """Responde ao fato de a espaçonave ter sido atingida por um alienígena."""
     if stats.ships_left > 0:
     # Decrementa ships_left
