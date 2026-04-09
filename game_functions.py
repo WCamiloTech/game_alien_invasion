@@ -73,7 +73,7 @@ def check_play_button(ai_settings, screen, stats, play_button, ship, aliens, bul
         
 
 
-def update_screen(ai_settings, screen, stats, ship, aliens, bullets, play_button):
+def update_screen(ai_settings, screen, stats, sb, ship, aliens, bullets, play_button):
     """Atualiza as imagens na tela e alterna para a nova tela."""
     # Redesenha a tela a cada passagem pelo laço
     screen.fill(ai_settings.bg_color)
@@ -85,6 +85,9 @@ def update_screen(ai_settings, screen, stats, ship, aliens, bullets, play_button
     ship.blitme() 
     
     aliens.draw(screen)
+    
+    # Desenha a informação sobre pontuação 
+    sb.show_score()
     
     # Desenha o botão Play se o jogo estiver inativo 
     # stats = GameStats(ai_settings)
