@@ -35,7 +35,7 @@ def check_keyup_events(event, ship):
         ship.moving_left = False
 
 
-def check_events(ai_settings, screen,stats, play_button, ship, bullets):
+def check_events(ai_settings, screen, stats, play_button, ship, aliens, bullets):
     """Responde a eventos de pressionamento de teclas e de mouse."""
     for event in pygame.event.get(): 
         if event.type == pygame.QUIT:
@@ -44,15 +44,22 @@ def check_events(ai_settings, screen,stats, play_button, ship, bullets):
             check_keydown_events(event, ai_settings, screen, ship, bullets)         
         elif event.type == pygame.KEYUP: 
             check_keyup_events(event, ship)
-        elif event.type == pygame.MOUSEBUTTONDOWN:
+        elif event.type == pygame.MOUSEBUTTONDOWN: 
             mouse_x, mouse_y = pygame.mouse.get_pos()
-            check_play_button(stats, play_button, mouse_x, mouse_y)
+            check_play_button(ai_settings, screen, stats, play_button, ship, aliens, bullets, mouse_x, mouse_y)
         
 
-def check_play_button(stats, play_button, mouse_x, mouse_y): 
+def check_play_button(ai_settings, screen, stats, play_button, ship, aliens, bullets, mouse_x, mouse_y):
     """Inicia um novo jogo quando o jogador clicar em Play."""
-    if play_button.rect.collidepoint(mouse_x, mouse_y): 
+    if play_button.rect.collidepoint(mouse_x, mouse_y):
+        # Reinicia os dados estatísticos do jogo
+        stats.reset_stats()
         stats.game_active = True
+        aliens.empty()
+        bullets.empty()
+        # Cria uma nova frota e centraliza a espaçonave
+        create_fleet(ai_settings, screen, ship, aliens)
+        ship.center_ship()
 
 
 def update_screen(ai_settings, screen, stats, ship, aliens, bullets, play_button):
@@ -224,3 +231,4 @@ def ship_hit(ai_settings, stats, screen, ship, aliens, bullets):
         
     else:
         stats.game_active = False
+
