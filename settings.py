@@ -13,7 +13,7 @@ class Settings():
         
         # Configurações dos projéteis 
         self.bullet_speed_factor = 3
-        self.bullet_width = 3
+        self.bullet_width = 30
         self.bullet_height = 15
         self.bullet_color = 60, 60, 60
         self.bullets_allowed = 3
@@ -25,8 +25,14 @@ class Settings():
         # A taxa com que a velocidade do jogo aumenta
         self.speedup_scale = 1.1
         
+        # A taxa com que os pontos para cada alienígena aumentam
+        self.score_scale = 1.5
+        
+        self.initialize_dynamic_settings()
+        
         # fleet_direction igual a 1 representa a direita; -1 representa a esquerda
         self.fleet_direction = 1
+        
         
     def initialize_dynamic_settings(self): 
         """Inicializa as configurações que mudam no decorrer do jogo."""
@@ -45,4 +51,5 @@ class Settings():
         self.ship_speed_factor *= self.speedup_scale 
         self.bullet_speed_factor *= self.speedup_scale 
         self.alien_speed_factor *= self.speedup_scale
-        
+        self.alien_points = int(self.alien_points * self.score_scale)
+        print(self.alien_points)

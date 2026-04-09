@@ -114,7 +114,7 @@ def update_bullets(ai_settings, screen, stats, sb, ship, aliens, bullets):
             
     # Verifica se algum projétil atingiu os alienígenas
     # Em caso afirmativo, livra-se do projétil e do alienígena
-    collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
+    # collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
     
     if len(aliens) == 0: 
         # Destrói os projéteis existentes e cria uma nova frota
@@ -128,8 +128,8 @@ def check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship, aliens, 
     collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
     
     if collisions:
-        for aliens in collisions.values():
-            stats.score += ai_settings.alien_points * len(aliens)
+        for aliens_list in collisions.values():
+            stats.score += ai_settings.alien_points * len(aliens_list)
             sb.prep_score()
     
     if len(aliens) == 0: 
