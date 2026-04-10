@@ -131,6 +131,7 @@ def check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship, aliens, 
         for aliens_list in collisions.values():
             stats.score += ai_settings.alien_points * len(aliens_list)
             sb.prep_score()
+            check_high_score(stats, sb)
     
     if len(aliens) == 0: 
         # Destrói projéteis existentes, aumenta a velocidade do jogo e cria nova frota
@@ -253,3 +254,8 @@ def ship_hit(ai_settings, stats, screen, ship, aliens, bullets):
         stats.game_active = False
         pygame.mouse.set_visible(True)
 
+def check_high_score(stats, sb):
+    """Verifica se há uma nova pontuação máxima."""
+    if stats.score > stats.high_score: 
+        stats.high_score = stats.score
+        sb.prep_high_score()
