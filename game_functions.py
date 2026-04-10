@@ -35,7 +35,7 @@ def check_keyup_events(event, ship):
         ship.moving_left = False
 
 
-def check_events(ai_settings, screen, stats, play_button, ship, aliens, bullets):
+def check_events(ai_settings, screen, stats, sb, play_button, ship, aliens, bullets):
     """Responde a eventos de pressionamento de teclas e de mouse."""
     for event in pygame.event.get(): 
         if event.type == pygame.QUIT:
@@ -46,10 +46,10 @@ def check_events(ai_settings, screen, stats, play_button, ship, aliens, bullets)
             check_keyup_events(event, ship)
         elif event.type == pygame.MOUSEBUTTONDOWN: 
             mouse_x, mouse_y = pygame.mouse.get_pos()
-            check_play_button(ai_settings, screen, stats, play_button, ship, aliens, bullets, mouse_x, mouse_y)
+            check_play_button(ai_settings, screen, stats, sb, play_button, ship, aliens, bullets, mouse_x, mouse_y)
         
 
-def check_play_button(ai_settings, screen, stats, play_button, ship, aliens, bullets, mouse_x, mouse_y):
+def check_play_button(ai_settings, screen, stats, sb, play_button, ship, aliens, bullets, mouse_x, mouse_y):
     """Inicia um novo jogo quando o jogador clicar em Play."""
     button_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)
     
@@ -58,6 +58,13 @@ def check_play_button(ai_settings, screen, stats, play_button, ship, aliens, bul
         ai_settings.initialize_dynamic_settings()
         stats.reset_stats()
         stats.game_active = True
+        
+        # Reinicia as imagens do painel de pontuação 
+        sb.prep_score()
+        sb.prep_high_score() 
+        sb.prep_level()
+        
+
         
         #Limpa a tela
         aliens.empty()
@@ -70,8 +77,6 @@ def check_play_button(ai_settings, screen, stats, play_button, ship, aliens, bul
         
         # Oculta o cursor do mouse
         pygame.mouse.set_visible(False)
-        
-
 
 def update_screen(ai_settings, screen, stats, sb, ship, aliens, bullets, play_button):
     """Atualiza as imagens na tela e alterna para a nova tela."""
@@ -114,11 +119,16 @@ def update_bullets(ai_settings, screen, stats, sb, ship, aliens, bullets):
             
     # Verifica se algum projétil atingiu os alienígenas
     # Em caso afirmativo, livra-se do projétil e do alienígena
-    # collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
     
     if len(aliens) == 0: 
         # Destrói os projéteis existentes e cria uma nova frota
         bullets.empty()
+        ai_settings.increase_speed()
+        
+        # Aumenta o nível
+        stats.level += 1
+        sb.prep_level()
+        
         create_fleet(ai_settings, screen, ship, aliens)
 
         
@@ -138,7 +148,10 @@ def check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship, aliens, 
         bullets.empty()
         ai_settings.increase_speed() 
         create_fleet(ai_settings, screen, ship, aliens)
-    
+        
+        # Aumenta o nível
+        stats.level += 1
+        sb.prep_level()
 
 def create_fleet(ai_settings, screen, aliens): 
     """Cria uma frota completa de alienígenas."""
