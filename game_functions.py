@@ -63,7 +63,7 @@ def check_play_button(ai_settings, screen, stats, sb, play_button, ship, aliens,
         sb.prep_score()
         sb.prep_high_score() 
         sb.prep_level()
-        
+        sb.prep_ships() 
 
         
         #Limpa a tela
@@ -220,18 +220,17 @@ def change_fleet_direction(ai_settings, aliens):
         alien.rect.y += ai_settings.fleet_drop_speed 
     ai_settings.fleet_direction *= -1
     
-def check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets):
+def check_aliens_bottom(ai_settings, screen, stats, sb, ship, aliens, bullets):
     """Verifica se algum alienígena alcançou a parte inferior da tela."""
     screen_rect = screen.get_rect() 
     for alien in aliens.sprites():
         if alien.rect.bottom >= screen_rect.bottom:
             # Trata esse caso do mesmo modo que é feito quando a espaçonave é atingida 
-            ship_hit(ai_settings, stats, screen, ship, aliens, bullets)
-            print('Alien hit!') 
+            ship_hit(ai_settings, screen, stats, sb, ship, aliens, bullets) 
             break
     
     
-def update_aliens(ai_settings, stats, screen, ship, aliens, bullets):
+def update_aliens(ai_settings, screen, stats, sb, ship, aliens, bullets):
     """ Verifica se a frota está em uma das bordas e então atualiza as 
     posições de todos os alienígenas da frota."""
     check_fleet_edges(ai_settings, aliens)
@@ -239,18 +238,21 @@ def update_aliens(ai_settings, stats, screen, ship, aliens, bullets):
     
     # Verifica se houve colisões entre alienígenas e a espaçonave
     if pygame.sprite.spritecollideany(ship, aliens): 
-        ship_hit(ai_settings, stats, screen, ship, aliens, bullets)
+        ship_hit(ai_settings, screen, stats, sb, ship, aliens, bullets)
         # print("Ship hit!!!")
         
     # Verifica se há algum alienígena que atingiu a parte inferior da tela
-    check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets)
+    check_aliens_bottom(ai_settings, screen, stats, sb, ship, aliens, bullets)
     
     
-def ship_hit(ai_settings, stats, screen, ship, aliens, bullets):
+def ship_hit(ai_settings, screen, stats, sb, ship, aliens, bullets):
     """Responde ao fato de a espaçonave ter sido atingida por um alienígena."""
     if stats.ships_left > 0:
     # Decrementa ships_left
         stats.ships_left -= 1
+        
+        # Atualiza o painel de pontuações
+        sb.prep_ships()
         
         # Esvazia a lista de alienígenas e de projéteis
         aliens.empty()
